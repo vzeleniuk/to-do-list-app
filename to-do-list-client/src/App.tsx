@@ -1,25 +1,11 @@
-import './App.css';
-import logo from './logo.svg';
+import { Container, Typography } from '@mui/material';
+import { AppBar } from './components/AppBar';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
-export default App;
+export const App = () => (
+   <>
+    <AppBar />
+    <Container maxWidth="lg" component="main" sx={{ mt: 2 }}>
+      <Typography component="p">There's nothing here yet</Typography>
+    </Container>
+   </>
+);
