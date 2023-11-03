@@ -36,12 +36,33 @@
     ],
     "rules": {
       "react-hooks/exhaustive-deps": "off",
-      "jsx-quotes": ["warn", "prefer-double"],
-      "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
-      "array-bracket-spacing": ["warn", "always"],
-      "object-curly-spacing": ["warn", "always"],
-      "comma-dangle":  ["warn", "only-multiline"],
-      "curly": ["error", "multi-line"]
+      "jsx-quotes": [
+        "warn",
+        "prefer-double"
+      ],
+      "brace-style": [
+        "warn",
+        "1tbs",
+        {
+          "allowSingleLine": true
+        }
+      ],
+      "array-bracket-spacing": [
+        "warn",
+        "always"
+      ],
+      "object-curly-spacing": [
+        "warn",
+        "always"
+      ],
+      "comma-dangle": [
+        "warn",
+        "only-multiline"
+      ],
+      "curly": [
+        "error",
+        "multi-line"
+      ]
     }
   },
   "browserslist": {

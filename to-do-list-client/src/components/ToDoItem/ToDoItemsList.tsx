@@ -12,9 +12,9 @@ export const ToDoItemsList = observer(({
     toDoListStore: {
       status,
       toDoList,
+      getToDoList,
       addToDo,
       removeToDo,
-      getToDoList,
       updateToDo,
     }
   }: Props) => {

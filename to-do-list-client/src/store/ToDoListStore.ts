@@ -10,12 +10,12 @@ type ToDoItem = {
 }
 
 export class ToDoListStore {
-  toDoService: ToDoService = new ToDoService();
+  toDoService: ToDoService;
   toDoList: ToDo[] = [];
   status: 'initial' | 'success' | 'error' = 'initial';
 
   constructor() {
-    this.toDoList = [ new ToDo() ];
+    this.toDoService = new ToDoService();
     makeObservable(this, {
       status: observable,
       toDoList: observable,
@@ -25,8 +25,6 @@ export class ToDoListStore {
       removeToDo: action.bound,
     });
   }
-
-  isLastToDoItemIsNotEmpty = () => !!this.toDoList.slice(-1)[0]?.name
 
   getToDoList = async () => {
     try {
