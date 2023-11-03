@@ -1,53 +1,63 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Checkbox, IconButton, Stack, TextField } from "@mui/material";
-import { ToDoItem } from '../../types/toDo-types';
-import { useState } from 'react';
+import { Checkbox, IconButton, Stack, TextField } from '@mui/material';
+import { observer } from 'mobx-react-lite';
+import { useCallback } from 'react';
+import { ToDo } from '../../store/ToDo';
 
 interface Props {
-  item?: ToDoItem
+  item: ToDo;
+  addToDo: Function;
+  removeToDo: Function;
 }
 
-export const ToDoItemView = ({ item }: Props) => {
-  const [name, setName ] = useState('')
-  const [checked, setChecked ] = useState(false)
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    console.log('set checked', event.target.checked, item?.id)
-  };
-  const isChecked = item?.checked ?? checked;
+export const ToDoItemView = observer(({ item, addToDo, removeToDo }: Props) => {
+  const handleCheckboxChange = useCallback((_event: React.ChangeEvent<HTMLInputElement>) => {
+    item.toggle();
+  }, [item]);
+
+  const handleInputBlur = useCallback((value: string) => {
+    if (value) {
+      addToDo();
+    } else {
+      removeToDo(item.id)
+    }
+
+  }, [item, addToDo, removeToDo])
+
+  const handleDelete = useCallback(() => {
+    console.log("Delete", item.id)
+  }, [item])
 
   return (
     <Stack flexDirection="row" gap={2}>
       <Checkbox
-        checked={isChecked}
-        onChange={handleChange}
+        checked={item.checked}
+        onChange={handleCheckboxChange}
         inputProps={{ 'aria-label': 'controlled' }}
       />
       <TextField
         hiddenLabel
-        value={item?.name || name}
+        value={item.name}
         id="here-will-be-dynamic-id"
         size="small"
         placeholder="..."
-        disabled={isChecked}
+        disabled={item.checked}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setName(event.target.value);
+          item.update(event.target.value);
         }}
         onBlur={(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-          console.log('post/put todo: ', event.target.value, item?.id);
+          handleInputBlur(event.target.value)
         }}
       />
-      {(item?.name ?? name) && (
+      {item.name && (
         <IconButton
           aria-label="delete"
           title="Delete"
-          onClick={() => {
-            console.log("Delete todo", item?.id);
-          }}
+          onClick={handleDelete}
         >
           <CloseIcon />
         </IconButton>
       )}
     </Stack>
   )
-}
+})
