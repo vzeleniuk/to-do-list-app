@@ -15,7 +15,7 @@ export class ToDoListStore {
   status: 'initial' | 'success' | 'error' = 'initial';
 
   constructor() {
-    this.toDoList = [new ToDo()];
+    this.toDoList = [ new ToDo() ];
     makeObservable(this, {
       status: observable,
       toDoList: observable,

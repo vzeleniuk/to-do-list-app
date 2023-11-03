@@ -26,13 +26,23 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "eslint .",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": "off",
+      "jsx-quotes": ["warn", "prefer-double"],
+      "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
+      "array-bracket-spacing": ["warn", "always"],
+      "object-curly-spacing": ["warn", "always"],
+      "comma-dangle":  ["warn", "only-multiline"],
+      "curly": ["error", "multi-line"]
+    }
   },
   "browserslist": {
     "production": [

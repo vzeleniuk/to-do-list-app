@@ -1,11 +1,11 @@
-import { UpdateToDoPayload } from "../types";
+import { UpdateToDoPayload } from '../types';
 
-const webApiUrl = "http://localhost:9000/";
+const webApiUrl = 'http://localhost:9000/';
 
 export class ToDoService {
   get = async () => {
     const options = {
-      method: "GET",
+      method: 'GET',
     }
     const request = new Request(webApiUrl, options);
     const response = await fetch(request);
@@ -15,9 +15,9 @@ export class ToDoService {
 
   post = async (model: { name: string }) => {
     const headers = new Headers();
-    headers.append("Content-Type", "application/json");
+    headers.append('Content-Type', 'application/json');
     const options = {
-      method: "POST",
+      method: 'POST',
       headers,
       body: JSON.stringify(model)
     }
@@ -29,9 +29,9 @@ export class ToDoService {
 
   put = async (id: string, model: UpdateToDoPayload ) => {
     const headers = new Headers()
-    headers.append("Content-Type", "application/json");
+    headers.append('Content-Type', 'application/json');
     const options = {
-        method: "PUT",
+        method: 'PUT',
         headers,
         body: JSON.stringify(model)
     }
@@ -42,9 +42,9 @@ export class ToDoService {
 
   delete = async (id: string) => {
     const headers = new Headers();
-    headers.append("Content-Type", "application/json");
+    headers.append('Content-Type', 'application/json');
     const options = {
-      method: "DELETE",
+      method: 'DELETE',
       headers
     }
     const request = new Request(webApiUrl + id, options);

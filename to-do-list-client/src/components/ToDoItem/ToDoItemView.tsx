@@ -19,28 +19,28 @@ export const ToDoItemView = observer(({
   removeToDo,
   updateToDo,
 }: Props) => {
-  const [itemName, setItemName] = useState<string | undefined>(undefined);
+  const [ itemName, setItemName ] = useState<string | undefined>(undefined);
   const currentItemName = itemName ?? item.name;
 
   const handleCheckboxChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     if (currentItemName) {
-      updateToDo(item.id, {name: currentItemName, checked: event?.target.checked});
+      updateToDo(item.id, { name: currentItemName, checked: event?.target.checked });
     }
-  }, [currentItemName]);
+  }, [ currentItemName ]);
 
   const handleInputBlur = useCallback((value: string) => {
     if (value && !item.name) {
       addToDo(value);
     } else if (value && (value !== item.name)) {
-      updateToDo(item.id, {name: value, checked: item.checked});
+      updateToDo(item.id, { name: value, checked: item.checked });
     } else if (!value && item.name) {
       removeToDo(item.id)
     }
-  }, [item])
+  }, [ item ])
 
   const handleDelete = useCallback(() => {
     removeToDo(item.id);
-  }, [item])
+  }, [ item ])
 
   return (
     <Stack flexDirection="row" gap={2}>

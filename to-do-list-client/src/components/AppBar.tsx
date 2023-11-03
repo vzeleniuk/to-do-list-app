@@ -1,4 +1,4 @@
-import { Container, AppBar as MuiAppBar, Toolbar, Typography } from "@mui/material";
+import { Container, AppBar as MuiAppBar, Toolbar, Typography } from '@mui/material';
 
 export const AppBar = () => (
   <MuiAppBar position="static">
