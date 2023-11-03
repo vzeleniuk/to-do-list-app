@@ -25,7 +25,7 @@ export class ToDoService {
     return responseResult;
   }
 
-  put = async (model: string) => {
+  put = async (id: string, model: { name: string, checked: boolean } ) => {
     const headers = new Headers()
     headers.append("Content-Type", "application/json");
     const options = {
@@ -33,7 +33,7 @@ export class ToDoService {
         headers,
         body: JSON.stringify(model)
     }
-    const request = new Request(webApiUrl, options);
+    const request = new Request(webApiUrl + id, options);
     const response = await fetch(request);
     return response;
   }
@@ -45,7 +45,7 @@ export class ToDoService {
         method: "DELETE",
         headers
     }
-    const request = new Request(webApiUrl + "/" + id, options);
+    const request = new Request(webApiUrl + id, options);
     const response = await fetch(request);
     return response;
   }

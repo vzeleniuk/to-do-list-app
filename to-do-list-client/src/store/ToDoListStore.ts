@@ -2,6 +2,8 @@ import { action, makeObservable, observable, runInAction } from 'mobx';
 import { ToDoService } from '../services/ToDoService';
 import { ToDo } from './ToDo';
 
+export type UpdateToDoPayload = { name: string, checked: boolean };
+
 type ToDoItem = {
   id: string;
   name: string;
@@ -16,9 +18,11 @@ export class ToDoListStore {
   constructor() {
     this.toDoList = [new ToDo()];
     makeObservable(this, {
+      status: observable,
       toDoList: observable,
       getToDoList: action,
       addToDo: action,
+      updateToDo: action,
       removeToDo: action.bound,
     });
   }
@@ -29,19 +33,12 @@ export class ToDoListStore {
     try {
       const data: ToDoItem[] = await this.toDoService.get();
       runInAction(() => {
-        const toDoListData = !data.length
-          ? [new ToDo()]
-          : data.map((item: ToDoItem) => new ToDo(item.name, item.id, item.checked)
-        );
+        const toDoListData = data.map((item: ToDoItem) => new ToDo(item.name, item.id, item.checked));
 
-        if (this.isLastToDoItemIsNotEmpty()) {
-          this.toDoList = [
-            ...toDoListData,
-            new ToDo(),
-          ];
-        } else {
-          this.toDoList = toDoListData;
-        }
+        this.toDoList = [
+          ...toDoListData,
+          new ToDo(),
+        ];
 
         this.status = 'success';
       });
@@ -54,6 +51,16 @@ export class ToDoListStore {
   addToDo = async (name: string) => {
     try {
       await this.toDoService.post({ name });
+      this.status = 'success';
+      await this.getToDoList();
+    } catch (error) {
+      this.status = 'error';
+    }
+  }
+
+  updateToDo = async (id: string, { name, checked }: UpdateToDoPayload) => {
+    try {
+      await this.toDoService.put(id, { name, checked });
       this.status = 'success';
       await this.getToDoList();
     } catch (error) {
