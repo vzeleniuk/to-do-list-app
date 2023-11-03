@@ -2,6 +2,12 @@ import { action, makeObservable, observable, runInAction } from 'mobx';
 import { ToDoService } from '../services/ToDoService';
 import { ToDo } from './ToDo';
 
+type ToDoItem = {
+  id: string;
+  name: string;
+  checked: boolean;
+}
+
 export class ToDoListStore {
   toDoService: ToDoService = new ToDoService();
   toDoList: ToDo[] = [];
@@ -13,18 +19,24 @@ export class ToDoListStore {
       toDoList: observable,
       addToDo: action.bound,
       removeToDo: action.bound,
+      getToDoList: action,
     });
   }
 
   getToDoList = async () => {
     try {
-      const data = await this.toDoService.get();
+      const { data } = await this.toDoService.get('todo-list');
       runInAction(() => {
-        this.toDoList = data;
+        const toDoListData = !data.length
+          ? [new ToDo()]
+          : data.map((item: ToDoItem) => new ToDo(item.name, item.id, item.checked)
+        );
+        this.toDoList = toDoListData;
         this.status = 'success';
       });
     } catch (error) {
-        this.status = 'error';
+      console.log('error: ', error);
+      this.status = 'error';
     }
   }
 

@@ -1,14 +1,16 @@
 const webApiUrl = "http://localhost:9000/";
 
 export class ToDoService {
-  get = async () => {
+  get = async (resource: string) => {
     const options = {
       method: "GET",
     }
-    const request = new Request(webApiUrl, options);
+    const request = new Request(webApiUrl + resource, options);
     const response = await fetch(request);
-    return response.json();
+    const responseResult = response.json();
+    return responseResult;
   }
+
   post = async (model: string) => {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
@@ -21,6 +23,7 @@ export class ToDoService {
     const response = await fetch(request);
     return response;
   }
+
   put = async (model: string) => {
     const headers = new Headers()
     headers.append("Content-Type", "application/json");
@@ -33,6 +36,7 @@ export class ToDoService {
     const response = await fetch(request);
     return response;
   }
+
   delete = async (id: string) => {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");

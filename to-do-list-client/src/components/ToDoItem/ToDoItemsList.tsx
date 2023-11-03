@@ -1,7 +1,8 @@
 import { Stack } from '@mui/material';
-import { ToDoItemView } from './ToDoItemView';
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
 import { ToDoListStore } from '../../store/ToDoListStore';
+import { ToDoItemView } from './ToDoItemView';
 
 interface Props {
   toDoListStore: ToDoListStore
@@ -11,9 +12,14 @@ export const ToDoItemsList = observer(({
     toDoListStore: {
       toDoList,
       addToDo,
-      removeToDo
+      removeToDo,
+      getToDoList,
     }
   }: Props) => {
+
+  useEffect(() => {
+    getToDoList();
+  }, [])
 
   return (
     <Stack>
