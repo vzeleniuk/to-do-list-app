@@ -1,23 +1,40 @@
-import { makeObservable, observable, action } from "mobx"
-import { ToDo } from "./ToDo"
+import { action, makeObservable, observable, runInAction } from 'mobx';
+import { ToDoService } from '../services/ToDoService';
+import { ToDo } from './ToDo';
 
 export class ToDoListStore {
+  toDoService: ToDoService = new ToDoService();
   toDoList: ToDo[] = [];
-  constructor(toDoList: ToDo[]) {
+  status: 'initial' | 'success' | 'error' = 'initial';
+
+  constructor() {
+    this.toDoList = [new ToDo()];
     makeObservable(this, {
       toDoList: observable,
       addToDo: action.bound,
       removeToDo: action.bound,
     });
-    this.toDoList = toDoList;
+  }
+
+  getToDoList = async () => {
+    try {
+      const data = await this.toDoService.get();
+      runInAction(() => {
+        this.toDoList = data;
+        this.status = 'success';
+      });
+    } catch (error) {
+        this.status = 'error';
+    }
   }
 
   addToDo(name?: string) {
     const lastToDoItemIsNotEmpty = this.toDoList.slice(-1)[0]?.name;
     if (lastToDoItemIsNotEmpty) {
+      const emptyToDo = new ToDo(name);
       this.toDoList = [
         ...this.toDoList,
-        new ToDo(name)
+        emptyToDo,
       ]
     }
   }
