@@ -56,11 +56,22 @@ const updateToDo = (req, res) => {
 }
 
 const deleteToDo = (req, res) => {
-  res.json({
-    message: 'Deleted'
-  })
+  try {
+    const toDoId = req.params.toDoId;
+    console.log('Deleting ToDo ', toDoId);
+    toDoList.delete(toDoId);
+    if (!toDoList.has(toDoId)) {
+      console.log('Delete ToDo successfully');
+    }
+    console.log('ToDo List', [...toDoList.values()])
+    res
+      .status(204)
+      .send()
+  } catch (error) {
+    console.log('Error deleting ToDo ', err)
+    throw err
+  }
 }
-
 
 module.exports = {
   getToDoList,

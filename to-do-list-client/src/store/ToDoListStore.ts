@@ -1,8 +1,7 @@
 import { action, makeObservable, observable, runInAction } from 'mobx';
 import { ToDoService } from '../services/ToDoService';
+import { UpdateToDoPayload } from '../types';
 import { ToDo } from './ToDo';
-
-export type UpdateToDoPayload = { name: string, checked: boolean };
 
 type ToDoItem = {
   id: string;
@@ -20,9 +19,9 @@ export class ToDoListStore {
     makeObservable(this, {
       status: observable,
       toDoList: observable,
-      getToDoList: action,
-      addToDo: action,
-      updateToDo: action,
+      getToDoList: action.bound,
+      addToDo: action.bound,
+      updateToDo: action.bound,
       removeToDo: action.bound,
     });
   }
@@ -51,31 +50,42 @@ export class ToDoListStore {
   addToDo = async (name: string) => {
     try {
       await this.toDoService.post({ name });
-      this.status = 'success';
+      runInAction(() => {
+        this.status = 'success';
+      })
       await this.getToDoList();
     } catch (error) {
-      this.status = 'error';
+      runInAction(() => {
+        this.status = 'error';
+      })
     }
   }
 
   updateToDo = async (id: string, { name, checked }: UpdateToDoPayload) => {
     try {
       await this.toDoService.put(id, { name, checked });
-      this.status = 'success';
+      runInAction(() => {
+        this.status = 'success';
+      })
       await this.getToDoList();
     } catch (error) {
-      this.status = 'error';
+      runInAction(() => {
+        this.status = 'error';
+      })
     }
   }
 
-  removeToDo(id: string) {
-    const hasSeveralToDos = this.toDoList.length > 1;
-    const hasName = this.toDoList.find(toDo => toDo.id === id && !toDo.name);
-    const isLastElement = this.toDoList.findIndex(toDo => toDo.id === id) === this.toDoList.length - 1;
-
-    if (hasSeveralToDos && hasName && !isLastElement) {
-      const filteredList = this.toDoList.filter(toDo => toDo.id !== id);
-      this.toDoList = filteredList;
+  removeToDo = async (id: string) => {
+    try {
+      await this.toDoService.delete(id);
+      runInAction(() => {
+        this.status = 'success';
+      })
+      await this.getToDoList();
+    } catch (error) {
+      runInAction(() => {
+        this.status = 'error';
+      })
     }
   }
 }
