@@ -17,21 +17,32 @@ export class ToDoListStore {
     this.toDoList = [new ToDo()];
     makeObservable(this, {
       toDoList: observable,
-      addToDo: action.bound,
-      removeToDo: action.bound,
       getToDoList: action,
+      addToDo: action,
+      removeToDo: action.bound,
     });
   }
 
+  isLastToDoItemIsNotEmpty = () => !!this.toDoList.slice(-1)[0]?.name
+
   getToDoList = async () => {
     try {
-      const { data } = await this.toDoService.get('todo-list');
+      const data: ToDoItem[] = await this.toDoService.get();
       runInAction(() => {
         const toDoListData = !data.length
           ? [new ToDo()]
           : data.map((item: ToDoItem) => new ToDo(item.name, item.id, item.checked)
         );
-        this.toDoList = toDoListData;
+
+        if (this.isLastToDoItemIsNotEmpty()) {
+          this.toDoList = [
+            ...toDoListData,
+            new ToDo(),
+          ];
+        } else {
+          this.toDoList = toDoListData;
+        }
+
         this.status = 'success';
       });
     } catch (error) {
@@ -40,14 +51,13 @@ export class ToDoListStore {
     }
   }
 
-  addToDo(name?: string) {
-    const lastToDoItemIsNotEmpty = this.toDoList.slice(-1)[0]?.name;
-    if (lastToDoItemIsNotEmpty) {
-      const emptyToDo = new ToDo(name);
-      this.toDoList = [
-        ...this.toDoList,
-        emptyToDo,
-      ]
+  addToDo = async (name: string) => {
+    try {
+      await this.toDoService.post({ name });
+      this.status = 'success';
+      await this.getToDoList();
+    } catch (error) {
+      this.status = 'error';
     }
   }
 

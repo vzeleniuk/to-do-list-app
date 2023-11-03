@@ -25,8 +25,8 @@ const StyledInput = styled(TextField)(({ disabled, theme }) => ({
 
 interface Props {
   item: ToDo;
-  addToDo: Function;
-  removeToDo: Function;
+  addToDo: (name: string) => void;
+  removeToDo: (id: string) => void;
 }
 
 export const ToDoItemView = observer(({ item, addToDo, removeToDo }: Props) => {
@@ -36,7 +36,7 @@ export const ToDoItemView = observer(({ item, addToDo, removeToDo }: Props) => {
 
   const handleInputBlur = useCallback((value: string) => {
     if (value) {
-      addToDo();
+      addToDo(value);
     } else {
       removeToDo(item.id)
     }

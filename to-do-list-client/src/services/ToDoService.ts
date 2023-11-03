@@ -1,33 +1,34 @@
 const webApiUrl = "http://localhost:9000/";
 
 export class ToDoService {
-  get = async (resource: string) => {
+  get = async () => {
     const options = {
       method: "GET",
     }
-    const request = new Request(webApiUrl + resource, options);
+    const request = new Request(webApiUrl, options);
     const response = await fetch(request);
     const responseResult = response.json();
     return responseResult;
   }
 
-  post = async (model: string) => {
+  post = async (model: { name: string }) => {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
-    var options = {
+    const options = {
       method: "POST",
       headers,
       body: JSON.stringify(model)
     }
     const request = new Request(webApiUrl, options);
     const response = await fetch(request);
-    return response;
+    const responseResult = response.json();
+    return responseResult;
   }
 
   put = async (model: string) => {
     const headers = new Headers()
     headers.append("Content-Type", "application/json");
-    var options = {
+    const options = {
         method: "PUT",
         headers,
         body: JSON.stringify(model)
