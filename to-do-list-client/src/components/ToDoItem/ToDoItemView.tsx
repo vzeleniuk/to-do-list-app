@@ -1,8 +1,27 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Checkbox, IconButton, Stack, TextField } from '@mui/material';
+import { Checkbox, IconButton, Stack, TextField, styled } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
 import { ToDo } from '../../store/ToDo';
+
+const StyledInput = styled(TextField)(({ disabled, theme }) => ({
+  textDecoration: disabled ? 'line-through' : 'unset',
+  color: theme.palette.grey[500],
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'transparent',
+    },
+    '&.Mui-disabled fieldset': {
+      borderColor: 'transparent',
+    },
+    '&:hover fieldset': {
+      borderColor: 'transparent',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#6F7E8C',
+    },
+  },
+}));
 
 interface Props {
   item: ToDo;
@@ -35,13 +54,13 @@ export const ToDoItemView = observer(({ item, addToDo, removeToDo }: Props) => {
         onChange={handleCheckboxChange}
         inputProps={{ 'aria-label': 'controlled' }}
       />
-      <TextField
+      <StyledInput
         hiddenLabel
         value={item.name}
         id="here-will-be-dynamic-id"
         size="small"
         placeholder="..."
-        disabled={item.checked}
+        disabled={!!item.name && item.checked}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           item.update(event.target.value);
         }}
