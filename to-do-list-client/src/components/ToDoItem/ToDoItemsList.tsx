@@ -1,4 +1,4 @@
-import { Skeleton, Stack, Typography } from '@mui/material';
+import { CircularProgress, Stack, Typography } from '@mui/material';
 import Fuse from 'fuse.js';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useState } from 'react';
@@ -50,7 +50,7 @@ export const ToDoItemsList = observer(({
       </Stack>
       <Stack>
         {status === 'initial'
-          ? <Skeleton variant="rounded" width={400} height={40} />
+          ? <CircularProgress />
           : toDoListFilterResults.map(toDoItem => (
               <ToDoItemView
                 item={toDoItem}
