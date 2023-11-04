@@ -57,11 +57,18 @@ export const ToDoItemView = observer(({
         size="small"
         placeholder="...start typing"
         disabled={!!item.name && item.checked}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setItemName(event.target.value);
-        }}
-        onBlur={(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-          handleInputBlur(event.target.value)
+        InputProps={{
+          onKeyDown: (event) => {
+            if (event.key === 'Enter' && currentItemName) {
+              event.currentTarget.blur();
+            }
+          },
+          onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+            setItemName(event.target.value);
+          },
+          onBlur: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+            handleInputBlur(event.target.value)
+          }
         }}
       />
       {item.name && (
